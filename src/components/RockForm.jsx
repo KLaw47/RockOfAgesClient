@@ -75,8 +75,9 @@ export const RockForm = ({ fetchRocks }) => {
                         <select id="type" className="form-control"
                             onChange={e => {
                                 const copy = { ...rock }
-                                copy.type_id = parseInt(e.target.value)
+                                copy.typeId = parseInt(e.target.value)
                                 updateRockProps(copy)
+                                console.log(copy)
                             }}>
                             <option value={0}>- Select a type -</option>
                             {
