@@ -22,15 +22,29 @@ export const ApplicationViews = () => {
         },
     }])
 
-    const fetchRocksFromAPI = async () => {
-        const response = await fetch("http://localhost:8000/rocks",
-            {
-                headers: {
-                    Authorization: `Token ${JSON.parse(localStorage.getItem("rock_token")).token}`
-                }
-            })
-        const rocks = await response.json()
-        setRocksState(rocks)
+    const fetchRocksFromAPI = async (filter = "all") => {
+        let url = "http://localhost:8000/rocks";
+
+        if (filter === "owner=current") {
+            url += "?owner=current";
+        }
+
+        const res = await fetch(url, {
+            headers: {
+                Authorization: `Token ${JSON.parse(localStorage.getItem("rock_token")).token}`
+            }
+        });
+
+        const rocks = await res.json();
+        setRocksState(rocks);
+        // const response = await fetch("http://localhost:8000/rocks",
+        //     {
+        //         headers: {
+        //             Authorization: `Token ${JSON.parse(localStorage.getItem("rock_token")).token}`
+        //         }
+        //     })
+        // const rocks = await response.json()
+        // setRocksState(rocks)
     }
 
     return <BrowserRouter>
@@ -39,9 +53,9 @@ export const ApplicationViews = () => {
             <Route path="/register" element={<Register />} />
             <Route element={<Authorized />}>
                 <Route path="/" element={<Home />} />
-                <Route path="/allrocks" element={<RockList rocks={rocksState} fetchRocks={fetchRocksFromAPI} />} />
+                <Route path="/allrocks" element={<RockList rocks={rocksState} fetchRocks={(filter) => fetchRocksFromAPI("all")} />} />
                 <Route path="/create" element={<RockForm fetchRocks={fetchRocksFromAPI} />} />
-                <Route path="/mine" element={<RockList rocks={rocksState} fetchRocks={fetchRocksFromAPI} />} />
+                <Route path="/mine" element={<RockList rocks={rocksState} fetchRocks={fetchRocksFromAPI} filter="owner=current" />} />
             </Route>
         </Routes>
     </BrowserRouter>

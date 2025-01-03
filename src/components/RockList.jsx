@@ -1,9 +1,9 @@
 import { useEffect } from "react"
 
-export const RockList = ({ rocks, fetchRocks }) => {
+export const RockList = ({ rocks, fetchRocks, filter }) => {
     useEffect(() => {
-        fetchRocks();
-    }, [])
+        fetchRocks(filter);
+    }, [filter])
 
     const displayRocks = () => {
         if (rocks && rocks.length) {
